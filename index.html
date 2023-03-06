@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Low-complexity Real-time Neural Network for Blind Bandwidth Extension of Wideband Speech</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<style>
+h3 {
+    margin-top: 25px;
+}
+
+audio {
+    width: 120px;
+}
+.text-justify {
+    text-align: justify;
+}
+</style>
+<body>
+    <div class="container">
+        <h3>Low-complexity Real-time Neural Network for Blind Bandwidth Extension of Wideband Speech</h3>
+        <p class="text-center">Esteban Gómez<sup>*†</sup>, Mohammad Hassan Vali and Tom Bäckström</p>
+        <p class="text-center fst-italic">
+            <sup>*</sup>Department of Information and Communications Engineering, Aalto University, Espoo, Finland<br>
+            <sup>†</sup>Voicemod S.L., Valencia, Spain
+        </p>
+        <p class="text-center font-monospace">{esteban.gomezmellado, mohammad.vali, tom.backstrom}@aalto.fi</p>
+        <p class="text-justify">Speech is streamed at 16 kHz or lower sample rates
+            in many applications (e.g. VoIP, Bluetooth headsets). Extending
+            its bandwidth can produce significant quality improvements.
+            We introduce BBWEXNet, a lightweight neural network that
+            performs blind bandwidth extension of speech from 16 kHz (wideband)
+            to 48 kHz (fullband) in real-time in CPU. Our low latency
+            approach allows running the model with a maximum algorithmic
+            delay of 16 ms, enabling end-to-end communication in streaming
+            services and scenarios where the GPU is busy or unavailable.
+            We propose a series of optimizations that take advantage of the
+            U-Net architecture and vector quantization methods commonly
+            used in speech coding, to produce a model whose performance
+            is comparable to previous real-time solutions, but approximately
+            halving the memory footprint and computational cost. Moreover,
+            we show that the model complexity can be further reduced with
+            a marginal impact on the perceived output quality.</p>
+        <p><span class="badge text-bg-info">Bandwidth extension</span> <span class="badge text-bg-info">Speech processing</span> <span class="badge text-bg-info">Real-time</span> <span class="badge text-bg-info">Deep learning</span></p>
+        <p>
+            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Paper
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              This paper is currently in peer review process. This link will be updated accordingly once the process is finished.
+            </div>
+        </div>
+        <h3>Audio examples</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Unprocessed 16k</th>
+                    <th scope="col">Baseline 16k48k</th>
+                    <th scope="col">Baseline Shuffle 16k48k</th>
+                    <th scope="col">BBWEXNet NSVQ6 16k48k</th>
+                    <th scope="col">BBWEXNet NSVQ8 16k48k</th>
+                    <th scope="col">BBWEXNet NSVQ6 Shuffle 16k48k</th>
+                    <th scope="col">BBWEXNet NSVQ8 Shuffle 16k48k</th>
+                    <th scope="col">BBWEXNet NSVQ6 Shuffle 16k32k</th>
+                    <th scope="col">BBWEXNet NSVQ8 Shuffle 16k32k</th>
+                    <th scope="col">Ground truth 48k</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/00091-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/00091-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/00091-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/00091-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/00091-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/00091-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/00091-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/00091-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/00091-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/00091-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/00117-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/00117-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/00117-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/00117-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/00117-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/00117-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/00117-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/00117-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/00117-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/00117-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/00147-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/00147-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/00147-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/00147-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/00147-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/00147-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/00147-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/00147-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/00147-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/00147-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/00200-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/00200-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/00200-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/00200-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/00200-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/00200-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/00200-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/00200-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/00200-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/00200-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/01043-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/01043-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/01043-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/01043-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/01043-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/01043-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/01043-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/01043-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/01043-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/01043-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/01074-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/01074-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/01074-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/01074-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/01074-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/01074-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/01074-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/01074-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/01074-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/01074-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/01130-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/01130-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/01130-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/01130-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/01130-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/01130-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/01130-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/01130-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/01130-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/01130-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <audio controls>
+                            <source src="audio/00_input/01972-bbwex-strip-16k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/01_baseline-16k48k/01972-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/02_baseline-shuffle-16k48k/01972-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/03_nsvq6b-16k48k/01972-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/04_nsvq8b-16k48k/01972-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/05_nsvq6b-shuffle-16k48k/01972-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/06_nsvq8b-shuffle-16k48k/01972-bbwex-strip-48k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/07_nsvq6b-shuffle-16k32k/01972-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/08_nsvq8b-shuffle-16k32k/01972-bbwex-strip-32k-testing_pred.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="audio/09_output/01972-bbwex-strip-48k-testing.wav" type="audio/wav">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <h3>Acknowledgement</h3>
+        <p class="text-justify">The calculations presented in this publication were carried out using the computer resources of the Aalto University of Science “Science-IT” project.</p>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    </div>
+</body>
+</html>
